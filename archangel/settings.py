@@ -173,6 +173,7 @@ INSTALLED_APPS = (
     'django_evolution',
     'model_utils',
     'rest_framework',
+    'django_extensions',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
