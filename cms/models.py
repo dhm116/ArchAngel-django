@@ -23,6 +23,7 @@ class Course(models.Model):
 	schedule_no = models.CharField(max_length=7, null=False, unique=True)
 	start_date = models.DateField(null=False)
 	end_date = models.DateField(null=False)
+	active = models.BooleanField(null=False, default=False)
 
 	def __unicode__(self):
 		return u'#%s %s : %s'%(self.schedule_no, self.name, self.full_name)
@@ -38,10 +39,14 @@ class CourseSection(models.Model):
 		unique_together = (('section_no', 'course'),)
 		# order_with_respect_to = 'course'
 		ordering = ['section_no']
+		
+class Role(models.Model):
+	name = models.CharField(max_length=10)
 
 class CourseRoster(models.Model):
 	user = models.ForeignKey(CmsUser, related_name='courses')
 	section = models.ForeignKey(CourseSection, related_name='members')
+	role = models.ForeignKey(Role)
 	group = models.ForeignKey(Group)
 
 	class Meta:
@@ -53,7 +58,7 @@ class CourseRoster(models.Model):
 	course = property(_get_course)
 
 	def __unicode__(self):
-		return u'%s -> %s -> %s'%(self.user, self.section, self.group)
+		return u'%s -> %s -> %s'%(self.user, self.section, self.role, self.group)
 
 class Team(models.Model):
 	user = models.ForeignKey(CmsUser)
@@ -80,7 +85,7 @@ class Document(models.Model):
 	# course = models.ForeignKey(Course, related_name='documents')
 
 class Syllabus(Document):
-	course = models.ForeignKey(Course, related_name='syllabus')
+	course = models.OneToOneField(Course, null=False, related_name='syllabus')
 
 	class Meta:
 		verbose_name = 'Syllabus'
@@ -96,6 +101,7 @@ class Lesson(Document):
 	class Meta:
 		verbose_name = 'Lesson'
 		verbose_name_plural = 'Lessons'
+		# order_with_respect_to = 'course'
 		ordering = ['week_no']
 
 	def __unicode__(self):
@@ -103,7 +109,7 @@ class Lesson(Document):
 
 class Assignment(Document):
 	due_date = models.DateTimeField()
-	points = models.DecimalField(max_digits=5, decimal_places=2)
+	points = models.DecimalField(max_digits=5, decimal_places=0)
 	lesson = models.ForeignKey(Lesson, related_name='assignments')
 
 	class Meta:
@@ -116,8 +122,16 @@ class Assignment(Document):
 
 class AssignmentSubmission(Document):
 	assignment = models.ForeignKey(Assignment, related_name='submissions')
+	user = models.ForeignKey(CmsUser, related_name='submissions', null=True)
 	team = models.ForeignKey(Team, related_name='submissions', null=True)
 	submitted_date = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
+		# order_with_respect_to = 'assignment'
 		ordering = ['-submitted_date']
+		
+class Grades(models.Model):
+	user = models.ForeignKey(CmsUser, primary_key=True)
+	assignment = models.ForeignKey(Assignment, primary_key=True)
+	submission = models.OneToOneField(AssignmentSubmission)
+	score = models.DecimalField(max_digits=5, decimal_places=2)
