@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from models import *
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from serializers import *
 
 # Create your views here.
@@ -56,3 +56,9 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 class DocumentViewSet(viewsets.ModelViewSet):
 		model = Document
 		serializer_class = DocumentSerializer
+
+class StudentsList(viewsets.ModelViewSet):
+		# model = CmsUser
+		serializer_class = CmsUserSerializer
+		student_group = Group.objects.get(name='student')
+		queryset = CmsUser.objects.filter(courses__group_id=student_group.id)
