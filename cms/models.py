@@ -16,6 +16,9 @@ class UserProfile(models.Model):
 	picture = models.URLField(blank=True)
 	user = models.OneToOneField(CmsUser, null=False)
 
+class Role(Group):
+	pass
+
 class Course(models.Model):
 	name = models.CharField(max_length=400, null=False)
 	full_name = models.TextField()
@@ -39,15 +42,12 @@ class CourseSection(models.Model):
 		unique_together = (('section_no', 'course'),)
 		# order_with_respect_to = 'course'
 		ordering = ['section_no']
-		
-class Role(models.Model):
-	name = models.CharField(max_length=10)
 
 class CourseRoster(models.Model):
 	user = models.ForeignKey(CmsUser, related_name='members', primary_key=True)
 	section = models.ForeignKey(CourseSection, related_name='courses', primary_key=True)
 	role = models.ForeignKey(Role)
-	group = models.ForeignKey(Group)
+	#group = models.ForeignKey(Group)
 
 	def _get_course(self):
 		return self.section.course
