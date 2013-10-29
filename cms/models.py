@@ -52,10 +52,13 @@ class CourseSection(models.Model):
 		ordering = ['section_no']
 
 class CourseRoster(models.Model):
-	user = models.ForeignKey(CmsUser, related_name='members', primary_key=True)
-	section = models.ForeignKey(CourseSection, related_name='courses', primary_key=True)
+	user = models.ForeignKey(CmsUser, related_name='courses')
+	section = models.ForeignKey(CourseSection, related_name='members')
 	role = models.ForeignKey(Role)
 	#group = models.ForeignKey(Group)
+
+	class Meta:
+		unique_together = (('user', 'section'),)
 
 	def _get_course(self):
 		return self.section.course
@@ -63,12 +66,12 @@ class CourseRoster(models.Model):
 	course = property(_get_course)
 
 	def __unicode__(self):
-		return u'%s -> %s -> %s'%(self.user, self.section, self.role, self.group)
+		return u'%s -> %s -> %s'%(self.user, self.section, self.role)
 
 class Team(models.Model):
-	user = models.ForeignKey(CmsUser, primary_key=True)
-	section = models.ForeignKey(CourseSection, related_name='teams', primary_key=True)
-	team_no = models.PositiveIntegerField(primary_key=True)
+	user = models.ForeignKey(CmsUser)
+	section = models.ForeignKey(CourseSection, related_name='teams')
+	team_no = models.PositiveIntegerField()
 
 	def _get_course(self):
 		return self.section.course
@@ -76,6 +79,7 @@ class Team(models.Model):
 	course = property(_get_course)
 
 	class Meta:
+		unique_together = (('user', 'section', 'team_no'),)
 		ordering = ['team_no']
 
 class Document(models.Model):
@@ -126,7 +130,6 @@ class Assignment(Document):
 
 class AssignmentSubmission(Document):
 	assignment = models.ForeignKey(Assignment, related_name='submissions')
-	user = models.ForeignKey(CmsUser, related_name='submissions', null=True)
 	team = models.ForeignKey(Team, related_name='submissions', null=True)
 	submitted_date = models.DateTimeField(auto_now_add=True)
 	score = models.DecimalField(max_digits=5, decimal_places=2)
