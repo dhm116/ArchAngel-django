@@ -6,12 +6,7 @@ from django.db.models.fields import *
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'first_name', 'last_name', 'is_active', 'last_login', 'email')
-
-class CmsUserSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = CmsUser
-		fields = ('id', 'username', 'first_name', 'last_name', 'is_active', 'last_login', 'email', 'title', 'courses')
+		fields = ('id', 'username', 'first_name', 'last_name', 'is_active', 'last_login', 'email', 'courses', 'profile')
 
 class GroupSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -44,10 +39,11 @@ class CourseSectionSerializer(serializers.ModelSerializer):
 class CourseRosterSerializer(serializers.ModelSerializer):
 	# documents = DocumentObjectRelatedField(many=True)#, context={'request':request})
 	# syllabus = SyllabusSerializer()
+	course = serializers.Field('course.id')
 
 	class Meta:
 		model = CourseRoster
-		fields = ('id', 'user', 'section', 'group')
+		fields = ('id', 'user', 'section', 'group', 'course')
 
 class DocumentSerializer(serializers.ModelSerializer):
 	class Meta:

@@ -27,14 +27,6 @@ class UserViewSet(viewsets.ModelViewSet):
 		model = User
 		serializer_class = UserSerializer
 
-class CmsUserViewSet(viewsets.ModelViewSet):
-		"""
-		API endpoint that allows users to be viewed or edited.
-		"""
-		# queryset = CmsUser.objects.all()
-		model = CmsUser
-		serializer_class = CmsUserSerializer
-
 class GroupViewSet(viewsets.ModelViewSet):
 		"""
 		API endpoint that allows groups to be viewed or edited.
@@ -81,8 +73,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
 class StudentsList(viewsets.ModelViewSet):
 		# model = CmsUser
-		serializer_class = CmsUserSerializer
+		serializer_class = UserSerializer
 		student_group, created = Group.objects.get_or_create(name='student')
-		queryset = CmsUser.objects.filter(courses__group_id=student_group.id)
+		queryset = User.objects.filter(courses__group_id=student_group.id)
 
 custom_obtain_auth_token = CustomObtainAuthToken.as_view()

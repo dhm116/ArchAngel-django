@@ -8,7 +8,6 @@ admin.autodiscover()
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'cmsusers', CmsUserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'permissions', PermissionViewSet)
 router.register(r'courses', CourseViewSet)
