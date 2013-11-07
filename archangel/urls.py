@@ -18,6 +18,7 @@ router.register(r'lessons', LessonViewSet)
 router.register(r'assignments', AssignmentViewSet)
 router.register(r'documents', DocumentViewSet)
 router.register(r'students', StudentsList)
+# router.register(r'upcoming-assignments', UpcomingAssignmentsList)
 # router.register(r'auth-token/$', 'rest_framework.authtoken.views.obtain_auth_token')
 
 urlpatterns = patterns('',
@@ -33,4 +34,5 @@ urlpatterns = patterns('',
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token-auth/', 'cms.views.custom_obtain_auth_token'),
+    url(r'^upcoming-assignments/', 'cms.views.upcoming_assignments'),
 )

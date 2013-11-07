@@ -1,12 +1,21 @@
 from django.contrib.auth.models import User, Group, Permission
 from models import *
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, authentication, permissions
 from serializers import *
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.views import *
+from rest_framework.generics import *
+from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework import status, parsers, renderers
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.renderers import (
+    BaseRenderer,
+    JSONRenderer,
+    BrowsableAPIRenderer
+)
 from django.forms.models import model_to_dict
+import datetime
 # Create your views here.
 
 class CustomObtainAuthToken(ObtainAuthToken):
@@ -77,4 +86,17 @@ class StudentsList(viewsets.ModelViewSet):
 		student_group, created = Group.objects.get_or_create(name='student')
 		queryset = User.objects.filter(courses__group_id=student_group.id)
 
+class UpcomingAssignmentsList(ListAPIView):
+		serializer_class = AssignmentSerializer
+		model = Assignment
+		# render_classes = (BrowsableAPIRenderer, JSONRenderer)
+
+		def get_queryset(self):
+				user = self.request.user
+				# lessons = [course.lessons for course in courses]
+				assignments = Assignment.objects.filter(lesson__course__sections__members__user__id=user.id,
+						due_date__gte=datetime.date.today())
+				return assignments
+
 custom_obtain_auth_token = CustomObtainAuthToken.as_view()
+upcoming_assignments = UpcomingAssignmentsList.as_view()
