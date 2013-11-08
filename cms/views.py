@@ -44,6 +44,10 @@ class GroupViewSet(viewsets.ModelViewSet):
 		# queryset = Group.objects.all()
 		serializer_class = GroupSerializer
 
+		def get_queryset(self):
+				# Restrict permissions to those that you have
+				return self.request.user.groups.all()
+
 class PermissionViewSet(viewsets.ModelViewSet):
 		"""
 		API endpoint that allows permissions to be viewed or edited.
@@ -52,33 +56,68 @@ class PermissionViewSet(viewsets.ModelViewSet):
 		# queryset = Permission.objects.all()
 		serializer_class = PermissionSerializer
 
+		def get_queryset(self):
+				# Restrict permissions to those that you have
+				return self.request.user.user_permissions.all()
+
 class CourseViewSet(viewsets.ModelViewSet):
 		model = Course
 		serializer_class = CourseSerializer
+
+		def get_queryset(self):
+				# Restrict courses to those that you belong to
+				return Course.objects.filter(sections__members__user__id=self.request.user.id)
 
 class CourseSectionViewSet(viewsets.ModelViewSet):
 		model = CourseSection
 		serializer_class = CourseSectionSerializer
 
+		def get_queryset(self):
+				# Restrict course sections to those that you belong to
+				return CourseSection.objects.filter(members__user__id=self.request.user.id)
+
 class CourseRosterViewSet(viewsets.ModelViewSet):
 		model = CourseRoster
 		serializer_class = CourseRosterSerializer
+
+		def get_queryset(self):
+				# Restrict course roster to those in your same section
+				return CourseRoster.objects.filter(section__members__user__id=self.request.user.id)
+
+class TeamViewSet(viewsets.ModelViewSet):
+		model = Team
+		serializer_class = TeamSerializer
+
+		def get_queryset(self):
+				return Team.objects.filter(section__members__user__id=self.request.user.id)
 
 class SyllabusViewSet(viewsets.ModelViewSet):
 		model = Syllabus
 		serializer_class = SyllabusSerializer
 
+		def get_queryset(self):
+				return Syllabus.objects.filter(course__sections__members__user__id=self.request.user.id)
+
 class LessonViewSet(viewsets.ModelViewSet):
 		model = Lesson
 		serializer_class = LessonSerializer
+
+		def get_queryset(self):
+				return Lesson.objects.filter(course__sections__members__user__id=self.request.user.id)
 
 class AssignmentViewSet(viewsets.ModelViewSet):
 		model = Assignment
 		serializer_class = AssignmentSerializer
 
+		def get_queryset(self):
+				return Assignment.objects.filter(lesson__course__sections__members__user__id=self.request.user.id)
+
 class DocumentViewSet(viewsets.ModelViewSet):
 		model = Document
 		serializer_class = DocumentSerializer
+
+		def get_queryset(self):
+				return Document.objects.filter(author__id=self.request.user.id)
 
 class StudentsList(viewsets.ModelViewSet):
 		# model = CmsUser

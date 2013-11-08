@@ -18,6 +18,7 @@ router.register(r'lessons', LessonViewSet)
 router.register(r'assignments', AssignmentViewSet)
 router.register(r'documents', DocumentViewSet)
 router.register(r'students', StudentsList)
+router.register(r'teams', TeamViewSet)
 # router.register(r'upcoming-assignments', UpcomingAssignmentsList)
 # router.register(r'auth-token/$', 'rest_framework.authtoken.views.obtain_auth_token')
 

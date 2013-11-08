@@ -45,6 +45,13 @@ class CourseRosterSerializer(serializers.ModelSerializer):
 		model = CourseRoster
 		fields = ('id', 'user', 'section', 'group', 'course')
 
+class TeamSerializer(serializers.ModelSerializer):
+	course = serializers.Field('course.id')
+
+	class Meta:
+		model = Team
+		fields = ('id', 'user', 'section', 'team_no', 'course')
+
 class DocumentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Document
