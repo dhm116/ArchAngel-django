@@ -59,8 +59,6 @@ class DocumentSerializer(serializers.ModelSerializer):
 		fields = ('id', 'author', 'name', 'description', 'content', 'file_path', 'creation_date')
 
 class SyllabusSerializer(serializers.ModelSerializer):
-	#author = serializers.RelatedField(view_name='instructor-detail')
-	#course = serializers.RelatedField(view_name='course-detail')
 
 	class Meta:
 		model = Syllabus
@@ -68,18 +66,13 @@ class SyllabusSerializer(serializers.ModelSerializer):
 		# depth = 1
 
 class LessonSerializer(serializers.ModelSerializer):
-	#author = UserSerializer() #serializers.RelatedField(view_name='instructor-detail')
-	#course = serializers.RelatedField() #serializers.RelatedField(view_name='course-detail')
-	#assignments = serializers.RelatedField(view_name='assignment-detail', many=True)
 
 	class Meta:
 		model = Lesson
-		fields = ('id','author', 'name', 'description', 'content', 'file_path', 'creation_date', 'course', 'week_no')
+		fields = ('id','author', 'name', 'description', 'content', 'file_path', 'creation_date', 'course', 'week_no', 'assignments')
 		# depth = 1
 
 class AssignmentSerializer(serializers.ModelSerializer):
-	# author = serializers.RelatedField(view_name='instructor-detail')
-	# lesson = serializers.RelatedField(view_name='lesson-detail')
 
 	class Meta:
 		model = Assignment
