@@ -40,6 +40,7 @@ class CourseRosterSerializer(serializers.ModelSerializer):
 	# documents = DocumentObjectRelatedField(many=True)#, context={'request':request})
 	# syllabus = SyllabusSerializer()
 	course = serializers.Field('course.id')
+	group = serializers.RelatedField()
 
 	class Meta:
 		model = CourseRoster
