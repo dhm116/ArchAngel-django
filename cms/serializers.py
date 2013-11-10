@@ -76,7 +76,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Assignment
-		fields = ('id','author', 'name', 'description', 'content', 'creation_date', 'due_date', 'points', 'lesson')
+		fields = ('id','author', 'name', 'description', 'content', 'creation_date', 'file_path', 'due_date', 'points', 'lesson')
+
+class AssignmentSubmissionSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = AssignmentSubmission
+		fields = ('id','author', 'team', 'name', 'description', 'content', 'file_path', 'creation_date', 'submitted_date', 'score', 'assignment')
 
 class DocumentObjectRelatedField(serializers.RelatedField):
 	def to_native(self, value):
