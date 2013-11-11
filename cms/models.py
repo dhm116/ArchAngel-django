@@ -126,10 +126,24 @@ class Assignment(Document):
 
 class AssignmentSubmission(Document):
 	assignment = models.ForeignKey(Assignment, related_name='submissions')
-	team = models.ForeignKey(Team, related_name='submissions', null=True)
+	team = models.ForeignKey(Team, related_name='submissions', blank=True, null=True)
 	submitted_date = models.DateTimeField(auto_now_add=True)
-	score = models.DecimalField(max_digits=5, decimal_places=2)
+	# score = models.DecimalField(max_digits=5, decimal_places=2)
 
 	class Meta:
 		# order_with_respect_to = 'assignment'
 		ordering = ['-submitted_date']
+
+class GradedAssignmentSubmission(Document):
+	# assignment = models.ForeignKey(Assignment, related_name='grades')
+	submission = models.OneToOneField(AssignmentSubmission, null=False, related_name='grade')
+	score = models.DecimalField(max_digits=5, decimal_places=2)
+
+	def _get_assignment(self):
+		return self.submission.assignment
+
+	assignment = property(_get_assignment)
+
+	class Meta:
+		verbose_name = 'Graded Assignment'
+		verbose_name_plural = 'Graded Assignments'
