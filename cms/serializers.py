@@ -34,7 +34,7 @@ class CourseSectionSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = CourseSection
-		fields = ('id', 'section_no', 'course', 'members')
+		fields = ('id', 'section_no', 'course', 'members', 'teams')
 
 class CourseRosterSerializer(serializers.ModelSerializer):
 	# documents = DocumentObjectRelatedField(many=True)#, context={'request':request})

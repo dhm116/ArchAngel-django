@@ -67,6 +67,9 @@ class Team(models.Model):
 	user = models.ForeignKey(User)
 	section = models.ForeignKey(CourseSection, related_name='teams')
 	team_no = models.PositiveIntegerField()
+	name = models.CharField(max_length=200, null=True, blank=True)
+	start_date = models.DateField(null=True, blank=True)
+	end_date = models.DateField(null=True, blank=True)
 
 	def _get_course(self):
 		return self.section.course
