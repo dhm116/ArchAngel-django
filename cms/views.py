@@ -100,6 +100,15 @@ class TeamViewSet(viewsets.ModelViewSet):
 				q = Team.objects.filter(id__in=q)
 				return q
 
+class TeamMemberViewSet(viewsets.ModelViewSet):
+		model = TeamMember
+		serializer_class = TeamMemberSerializer
+
+		def get_queryset(self):
+				q = list(set(TeamMember.objects.filter(user__id=self.request.user.id).values_list('id', flat=True)))
+				q = TeamMember.objects.filter(id__in=q)
+				return q
+
 class SyllabusViewSet(viewsets.ModelViewSet):
 		model = Syllabus
 		serializer_class = SyllabusSerializer

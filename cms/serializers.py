@@ -51,7 +51,12 @@ class TeamSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Team
-		fields = ('id', 'user', 'section', 'team_no', 'course')
+		fields = ('id', 'members', 'section', 'team_no', 'course')
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = TeamMember
+		fields = ('id', 'team', 'user')
 
 class DocumentSerializer(serializers.ModelSerializer):
 	class Meta:

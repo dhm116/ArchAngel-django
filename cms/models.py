@@ -64,7 +64,6 @@ class CourseRoster(models.Model):
 		return u'%s -> %s -> %s'%(self.user, self.section, self.group)
 
 class Team(models.Model):
-	user = models.ForeignKey(User)
 	section = models.ForeignKey(CourseSection, related_name='teams')
 	team_no = models.PositiveIntegerField()
 	name = models.CharField(max_length=200, null=True, blank=True)
@@ -77,8 +76,16 @@ class Team(models.Model):
 	course = property(_get_course)
 
 	class Meta:
-		unique_together = (('user', 'section', 'team_no'),)
+		unique_together = (('section', 'team_no'),)
 		ordering = ['team_no']
+
+class TeamMember(models.Model):
+	user = models.ForeignKey(User, related_name='teams')
+	team = models.ForeignKey(Team, related_name='members')
+
+	class Meta:
+		unique_together = (('user', 'team'),)
+		ordering = ['team']
 
 class Document(models.Model):
 	author = models.ForeignKey(User)
@@ -150,3 +157,13 @@ class GradedAssignmentSubmission(Document):
 	class Meta:
 		verbose_name = 'Graded Assignment'
 		verbose_name_plural = 'Graded Assignments'
+
+class Forum(models.Model):
+	section = models.ForeignKey(CourseSection, related_name='responses')
+	lesson = models.ForeignKey(Lesson, related_name='forums')
+
+class Message(Document):
+	parent = models.ForeignKey('self', related_name='responses')
+
+class MessageAttachment(Document):
+	message = models.ForeignKey('Message', related_name='attachments')

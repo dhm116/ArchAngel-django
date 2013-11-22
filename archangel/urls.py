@@ -21,6 +21,7 @@ router.register(r'gradedassignmentsubmissions', GradedAssignmentSubmissionViewSe
 router.register(r'documents', DocumentViewSet)
 router.register(r'students', StudentsList)
 router.register(r'teams', TeamViewSet)
+router.register(r'teammembers', TeamMemberViewSet)
 # router.register(r'upcoming-assignments', UpcomingAssignmentsList)
 # router.register(r'auth-token/$', 'rest_framework.authtoken.views.obtain_auth_token')
 
@@ -36,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^doc/', include('rest_framework_swagger.urls')),
     url(r'^api-token-auth/', 'cms.views.custom_obtain_auth_token'),
     url(r'^upcoming-assignments/', 'cms.views.upcoming_assignments'),
 )
