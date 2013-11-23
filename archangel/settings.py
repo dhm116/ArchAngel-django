@@ -193,6 +193,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'django_extensions',
     'rest_framework_swagger',
+    'autofixture',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

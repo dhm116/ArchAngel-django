@@ -25,7 +25,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Course
-		fields = ('id', 'name', 'full_name', 'description', 'schedule_no', 'start_date', 'end_date' , 'sections', 'syllabus', 'lessons')
+		fields = ('id', 'name', 'full_name', 'description', 'schedule_no', 'start_date', 'end_date' , 'sections', 'syllabus', 'lessons', 'forums')
 		# depth = 1
 
 class CourseSectionSerializer(serializers.ModelSerializer):
@@ -74,7 +74,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Lesson
-		fields = ('id','author', 'name', 'description', 'content', 'file_path', 'creation_date', 'course', 'week_no', 'assignments')
+		fields = ('id','author', 'name', 'description', 'content', 'file_path', 'creation_date', 'course', 'week_no', 'assignments', 'forums')
 		# depth = 1
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -95,6 +95,22 @@ class GradedAssignmentSubmissionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = GradedAssignmentSubmission
 		fields = ('id','author', 'name', 'description', 'content', 'creation_date', 'file_path', 'submission', 'score', 'assignment')
+
+class ForumSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Forum
+		fields = ('id', 'course', 'lesson', 'name', 'description')
+
+class ForumPostSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = ForumPost
+		fields = ('id', 'author', 'response_to', 'name', 'description', 'content', 'creation_date', 'replies')
+		# depth = 1
+
+class ForumPostAttachmentSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = ForumPostAttachment
+		fields = ('id', 'author', 'post', 'name', 'description', 'content', 'creation_date')
 
 class DocumentObjectRelatedField(serializers.RelatedField):
 	def to_native(self, value):

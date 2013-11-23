@@ -154,6 +154,30 @@ class GradedAssignmentSubmissionViewSet(viewsets.ModelViewSet):
 				q = GradedAssignmentSubmission.objects.filter(id__in=q)
 				return q
 
+class ForumViewSet(viewsets.ModelViewSet):
+		model = Forum
+		serializer_class = ForumSerializer
+
+		def get_queryset(self):
+				q = list(set(Forum.objects.filter(
+					Q(course__sections__members__user__id=self.request.user.id)
+					| Q(lesson__course__sections__members__user__id=self.request.user.id)
+				).values_list('id', flat=True)))
+				q = Forum.objects.filter(id__in=q)
+				return q
+
+class ForumPostViewSet(viewsets.ModelViewSet):
+		model = ForumPost
+		serializer_class = ForumPostSerializer
+
+		def get_queryset(self):
+				q = list(set(ForumPost.objects.filter(
+					Q(author__id=self.request.user.id)
+					| Q(response_to__author__id=self.request.user.id)
+				).values_list('id', flat=True)))
+				q = Message.objects.filter(id__in=q)
+				return q
+
 class DocumentViewSet(viewsets.ModelViewSet):
 		model = Document
 		serializer_class = DocumentSerializer

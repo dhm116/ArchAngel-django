@@ -159,11 +159,15 @@ class GradedAssignmentSubmission(Document):
 		verbose_name_plural = 'Graded Assignments'
 
 class Forum(models.Model):
-	section = models.ForeignKey(CourseSection, related_name='responses')
-	lesson = models.ForeignKey(Lesson, related_name='forums')
+	name = models.CharField(max_length=400)
+	description = models.TextField(blank=True, null=True)
+	course = models.ForeignKey(Course, related_name='forums', blank=True, null=True)
+	lesson = models.ForeignKey(Lesson, related_name='forums', blank=True, null=True)
 
-class Message(Document):
-	parent = models.ForeignKey('self', related_name='responses')
+class ForumPost(Document):
+	response_to = models.ForeignKey('self', related_name='replies', null=True, blank=True)
+	forum = models.ForeignKey(Forum, related_name='posts')
 
-class MessageAttachment(Document):
-	message = models.ForeignKey('Message', related_name='attachments')
+class ForumPostAttachment(Document):
+	post = models.ForeignKey('ForumPost', related_name='attachments')
+
