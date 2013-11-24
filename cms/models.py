@@ -144,6 +144,11 @@ class AssignmentSubmission(Document):
 		# order_with_respect_to = 'assignment'
 		ordering = ['-submitted_date']
 
+	def _get_lesson(self):
+		return self.assignment.lesson
+
+	lesson = property(_get_lesson)
+
 class GradedAssignmentSubmission(Document):
 	# assignment = models.ForeignKey(Assignment, related_name='grades')
 	submission = models.OneToOneField(AssignmentSubmission, null=False, related_name='grade')
@@ -153,6 +158,11 @@ class GradedAssignmentSubmission(Document):
 		return self.submission.assignment
 
 	assignment = property(_get_assignment)
+
+	def _get_submission_author(self):
+		return self.submission.author
+
+	submission_author = property(_get_submission_author)
 
 	class Meta:
 		verbose_name = 'Graded Assignment'
