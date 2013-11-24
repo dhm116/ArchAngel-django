@@ -152,6 +152,11 @@ class GradedAssignmentSubmission(Document):
 
 	assignment = property(_get_assignment)
 
+	def _get_submission_author(self):
+		return self.submission.author
+
+	submission_author = property(_get_submission_author)
+
 	class Meta:
 		verbose_name = 'Graded Assignment'
 		verbose_name_plural = 'Graded Assignments'
