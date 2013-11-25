@@ -81,13 +81,13 @@ class AssignmentSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Assignment
-		fields = ('id','author', 'name', 'description', 'content', 'creation_date', 'file_path', 'due_date', 'points', 'lesson')
+		fields = ('id','author', 'name', 'description', 'content', 'creation_date', 'file_path', 'due_date', 'points', 'lesson','submissions')
 
 class AssignmentSubmissionSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = AssignmentSubmission
-		fields = ('id','author', 'team', 'name', 'description', 'content', 'file_path', 'creation_date', 'submitted_date', 'assignment')
+		fields = ('id','author', 'team', 'name', 'description', 'content', 'file_path', 'creation_date', 'submitted_date', 'assignment', 'grade')
 
 class GradedAssignmentSubmissionSerializer(serializers.ModelSerializer):
 	assignment = serializers.Field('assignment.id')
