@@ -185,7 +185,7 @@ class ForumPostViewSet(viewsets.ModelViewSet):
 					Q(author__id=self.request.user.id)
 					| Q(response_to__author__id=self.request.user.id)
 				).values_list('id', flat=True)))
-				q = Message.objects.filter(id__in=q)
+				q = ForumPost.objects.filter(id__in=q)
 				return q
 
 class DocumentViewSet(viewsets.ModelViewSet):
